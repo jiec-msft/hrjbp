@@ -35,7 +35,7 @@ class MyToolWindowFactory : ToolWindowFactory {
             val label = JBLabel(MyBundle.message("randomLabel", "?"))
 
             add(label)
-            add(JButton(MyBundle.message("shuffle")).apply {
+            add(JButton("Shuffle V6").apply {
                 addActionListener {
                     label.text = MyBundle.message("randomLabel", service.getRandomNumber())
                 }

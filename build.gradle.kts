@@ -53,6 +53,8 @@ dependencies {
 
 // Configure IntelliJ Platform Gradle Plugin - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-extension.html
 intellijPlatform {
+    autoReload = true  // Explicitly enable Auto-Reload for development
+    
     pluginConfiguration {
         name = providers.gradleProperty("pluginName")
         version = providers.gradleProperty("pluginVersion")
@@ -104,7 +106,7 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            recommended()
+            ide(providers.gradleProperty("platformType"), providers.gradleProperty("platformVersion"))
         }
     }
 }
@@ -133,6 +135,26 @@ tasks {
 
     publishPlugin {
         dependsOn(patchChangelog)
+    }
+    
+    // Disable buildSearchableOptions to avoid conflicts with multiple IDE instances
+    buildSearchableOptions {
+        enabled = false
+    }
+    
+    // Also disable dependent tasks
+    prepareJarSearchableOptions {
+        enabled = false
+    }
+    
+    jarSearchableOptions {
+        enabled = false
+    }
+
+    prepareSandbox {
+        doFirst {
+            delete(file("build/distributions/hrjbp-0.0.1.zip").absolutePath)
+        }
     }
 }
 
